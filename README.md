@@ -1,40 +1,88 @@
-# vue-typescript-test
+# Vue3-TypeScript Template
 
-This template should help get you started developing with Vue 3 in Vite.
+## 1. Environment
 
-## Recommended IDE Setup
+* Vue3 (vite)
+* TypeScript
+* Docker
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## 2. Build
 
-## Type Support for `.vue` Imports in TS
+### NPM
+**Project Setup**
+> npm install
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+**Compile and Hot-Reload for Development**
+> npm run dev
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+**Type-Check, Compile and Minify for Production**
 
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+> npm run build
 
-## Customize configuration
+Visit via http://localhost:5173
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+### Docker
 
-## Project Setup
+**Build image**
+> docker run -t ***imageName:version*** .
 
-```sh
-npm install
-```
+**Tag image**
+>docker tag ***imageName:version*** ***imageName:new_version***
 
-### Compile and Hot-Reload for Development
+**Run image as a container**
+>docker run -d -p ***5173:5173*** --name ***containerName*** ***imageName:version***
+    >>The port is 5173, which is set in ./vite.config.ts
 
-```sh
-npm run dev
-```
+Visit via http://localhost:5173
 
-### Type-Check, Compile and Minify for Production
+**List containers**
+>docker ps
 
-```sh
-npm run build
-```
+**Stop containers**
+>docker stop ***containerName***
+
+### Docker Compose
+
+**Build image and run it as a container**
+>docker-compose up -d
+
+**Rebuild the image**
+>docker-compose up --build -d
+
+## 3. DevLog
+
+**Port problem**
+Vue3(Vite) - TypeScript project running within docker container but http://localhost:8080 is out of connect.
+**Solution**
+configure host within ./vite.config.ts
+
+    import { fileURLToPath, URL } from 'node:url'
+    import { defineConfig } from 'vite'
+    import vue from '@vitejs/plugin-vue'
+
+    // https://vitejs.dev/config/
+    export default defineConfig({
+    plugins: [vue()],
+    resolve: {
+        alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url))
+        }
+    },
+    // localhost:port
+    server: {
+        host: true,
+        port:5173
+    }
+    })
+
+
+
+
+## 4. Demo 
+
+**Map View**
+
+![map_add_marker](https://user-images.githubusercontent.com/49648985/191279171-60005c1a-2771-4c59-b68c-3d1591150b23.PNG)
+
+
+
